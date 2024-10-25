@@ -70,7 +70,7 @@ const holidayInWorkDaysArray = computed(() => calcDaysArray.value.holidayArr)
 
 <template>
   <div class="card" :key="year">
-    <div class="">{{ month }}月</div>
+    <div class="month">{{ month }}月</div>
     <div class="days">
       <div class="header">
         <div class="day" v-for="day in header" :key="day">{{ day }}</div>
@@ -94,7 +94,12 @@ const holidayInWorkDaysArray = computed(() => calcDaysArray.value.holidayArr)
 
 <style lang="scss" scoped>
 .card {
-  padding: 5px;
+  padding: 10px;
+  .month {
+    font-weight: 700;
+    text-align: center;
+    color: #4e5255;
+  }
   .days {
     .header {
       display: grid;
