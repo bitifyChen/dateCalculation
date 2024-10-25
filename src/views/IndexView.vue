@@ -108,22 +108,64 @@ const yearHolidayArray = computed(() => {
       <div class="cell">
         <label>避開周末</label>
         <div class="checkbox">
-          <span>星期六 <input v-model="isSatHoliday" type="checkbox" /></span>
-          <span>星期日 <input v-model="isSunHoliday" type="checkbox" /></span>
+          <span
+            >星期六
+            <el-switch
+              v-model="isSatHoliday"
+              style="
+                margin-left: 5px;
+                --el-switch-on-color: rgb(57, 82, 224);
+                --el-switch-off-color: rgba(255, 255, 255, 0.4);
+              "
+            />
+          </span>
+          <span
+            >星期日
+            <el-switch
+              v-model="isSunHoliday"
+              style="
+                margin-left: 5px;
+                --el-switch-on-color: rgb(57, 82, 224);
+                --el-switch-off-color: rgba(255, 255, 255, 0.4);
+              "
+            />
+          </span>
         </div>
       </div>
       <div class="cell">
         <label>避開節慶</label>
         <div class="checkbox">
-          <span>台灣 <input v-model="isTwHoliday" type="checkbox" /></span>
-          <span>中國<input v-model="isCnHoliday" type="checkbox" /></span>
+          <span
+            >台灣<el-switch
+              v-model="isTwHoliday"
+              style="
+                margin-left: 5px;
+                --el-switch-on-color: rgb(57, 82, 224);
+                --el-switch-off-color: rgba(255, 255, 255, 0.4);
+              "
+            />
+          </span>
+          <span
+            >中國<el-switch
+              v-model="isCnHoliday"
+              style="
+                margin-left: 5px;
+                --el-switch-on-color: rgb(57, 82, 224);
+                --el-switch-off-color: rgba(255, 255, 255, 0.4);
+              "
+          /></span>
         </div>
       </div>
       <div class="cell">
-        <label>避開指定日期</label>
-        <div class="checkbox">
-          <span>開啟 <input v-model="isCustomHoliday" type="checkbox" /></span>
-        </div>
+        <label
+          >避開指定日期<el-switch
+            v-model="isCustomHoliday"
+            style="
+              margin-left: 5px;
+              --el-switch-on-color: rgb(57, 82, 224);
+              --el-switch-off-color: rgba(255, 255, 255, 0.4);
+            "
+        /></label>
         <textarea
           rows="10"
           v-if="isCustomHoliday"
@@ -235,7 +277,7 @@ const yearHolidayArray = computed(() => {
       display: flex;
       align-items: center;
       span {
-        margin-right: 10px;
+        margin-right: 20px;
       }
     }
   }

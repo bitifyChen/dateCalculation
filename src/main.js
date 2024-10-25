@@ -6,6 +6,11 @@ import VueTippy from 'vue-tippy'
 import App from './App.vue'
 import router from './router'
 import 'tippy.js/dist/tippy.css'
+
+// ElementPlus
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+
 const app = createApp(App)
 
 app.use(createPinia())
@@ -25,4 +30,5 @@ app.use(
     },
   },
 )
+app.use(ElementPlus)
 app.mount('#app')
