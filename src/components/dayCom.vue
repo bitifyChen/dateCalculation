@@ -1,6 +1,8 @@
 <script setup>
 import dayjs from 'dayjs'
 import { computed } from 'vue'
+import twHoliday from '../assets/twHoliday.json'
+import cnHoliday from '../assets/cnHoliday.json'
 const props = defineProps({
   year: {
     type: Number,
@@ -42,11 +44,34 @@ const isHolidayInWorkDay = computed(() =>
 //定義的假日
 const yearHolidayArray = computed(() => props.yearHolidayArray)
 const isHoliday = computed(() => yearHolidayArray.value.includes(thisDay.value))
+
+const tippyNote = computed(() => {
+  let html = ``
+  if (isHoliday.value) {
+    const twYearHoliday = twHoliday[year.value] ?? null
+    const cnYearHoliday = cnHoliday[year.value] ?? null
+    if (twYearHoliday && Object.keys(twYearHoliday).includes(thisDay.value)) {
+      html += `<div style="display:flex;align-items:center"><span style="background:#68BE8D ; margin-right:5px;width: 10px;height: 10px;border-radius: 50%;"></span>台灣：${
+        twYearHoliday[thisDay.value]
+      }</div>`
+    }
+    if (cnYearHoliday && Object.keys(cnYearHoliday).includes(thisDay.value)) {
+      html += `<div style="display:flex;align-items:center"><span style="background:#ED1C24 ; margin-right:5px;width: 10px;height: 10px;border-radius: 50%;"></span>中國：${
+        cnYearHoliday[thisDay.value]
+      }</div>`
+    }
+    if (html === ``) {
+      html += `<div style="display:flex;align-items:center"><span style="background:rgb(245, 133, 133) ; margin-right:5px;width: 10px;height: 10px;border-radius: 50%;"></span>周末：假日</div>`
+    }
+  }
+  return html
+})
 </script>
 
 
 <template>
   <div
+    v-tippy="tippyNote"
     class="day"
     :class="{
       workDays: isWorkDay,
@@ -64,14 +89,17 @@ const isHoliday = computed(() => yearHolidayArray.value.includes(thisDay.value))
 .card .days .day {
   &.holiday {
     color: rgb(245, 133, 133);
+    cursor: pointer;
   }
   &.workDays {
     background-color: rgb(57, 82, 224);
     color: white;
+    cursor: pointer;
   }
   &.holidayInWorkDays {
     background-color: rgb(245, 133, 133);
     color: white;
+    cursor: pointer;
   }
 }
 </style>
