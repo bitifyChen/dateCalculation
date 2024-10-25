@@ -1,6 +1,7 @@
 <script setup>
 import dayjs from 'dayjs'
 import { computed, ref, watch } from 'vue'
+import { QuestionFilled } from '@element-plus/icons-vue'
 import Month from '../components/monthCom.vue'
 import twHoliday from '../assets/twHoliday.json'
 import cnHoliday from '../assets/cnHoliday.json'
@@ -26,6 +27,28 @@ const isSatHoliday = ref(false)
 const isSunHoliday = ref(true)
 const isTwHoliday = ref(true)
 const isCnHoliday = ref(false)
+const showTwHolidayDialog = ref(false)
+const showCnHolidayDialog = ref(false)
+const twHolidayTable = computed(() => {
+  const arr = []
+  if (twHoliday && twHoliday[year.value]) {
+    const _data = twHoliday[year.value]
+    Object.keys(_data).forEach(_key => {
+      arr.push({ date: _key, name: _data[_key] })
+    })
+  }
+  return arr
+})
+const cnHolidayTable = computed(() => {
+  const arr = []
+  if (cnHoliday && cnHoliday[year.value]) {
+    const _data = twHoliday[year.value]
+    Object.keys(_data).forEach(_key => {
+      arr.push({ date: _key, name: _data[_key] })
+    })
+  }
+  return arr
+})
 //自己輸入的假日
 const isCustomHoliday = ref(false)
 const customHoliday = ref('["2024-12-31","2025-01-01"]')
@@ -134,9 +157,11 @@ const yearHolidayArray = computed(() => {
       </div>
       <div class="cell">
         <label>避開節慶</label>
-        <div class="checkbox">
-          <span
-            >台灣<el-switch
+        <div class="">
+          <div>
+            台灣<el-icon :size="14" @click="showTwHolidayDialog = true"
+              ><QuestionFilled /></el-icon
+            ><el-switch
               v-model="isTwHoliday"
               style="
                 margin-left: 5px;
@@ -144,16 +169,19 @@ const yearHolidayArray = computed(() => {
                 --el-switch-off-color: rgba(255, 255, 255, 0.4);
               "
             />
-          </span>
-          <span
-            >中國<el-switch
+          </div>
+          <div>
+            中國<el-icon :size="14" @click="showCnHolidayDialog = true"
+              ><QuestionFilled /></el-icon
+            ><el-switch
               v-model="isCnHoliday"
               style="
                 margin-left: 5px;
                 --el-switch-on-color: rgb(57, 82, 224);
                 --el-switch-off-color: rgba(255, 255, 255, 0.4);
               "
-          /></span>
+            />
+          </div>
         </div>
       </div>
       <div class="cell">
@@ -181,6 +209,32 @@ const yearHolidayArray = computed(() => {
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="custom-dialog">
+    <el-dialog
+      v-model="showTwHolidayDialog"
+      :title="`${year}台灣假日`"
+      width="800"
+      center
+      class="custom-dialog"
+    >
+      <el-table :data="twHolidayTable">
+        <el-table-column property="date" label="日期" width="200" />
+        <el-table-column property="name" label="假期名稱" />
+      </el-table>
+    </el-dialog>
+    <el-dialog
+      v-model="showCnHolidayDialog"
+      :title="`${year}中國假日`"
+      width="800"
+      center
+    >
+      <el-table :data="cnHolidayTable">
+        <el-table-column property="date" label="日期" width="150" />
+        <el-table-column property="name" label="假期名稱" />
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -324,6 +378,30 @@ const yearHolidayArray = computed(() => {
         }
       }
     }
+  }
+}
+
+.custom-dialog :deep() {
+  .el-dialog {
+    background-color: rgba(255, 255, 255, 0.8); // 半透明白色背景
+    backdrop-filter: blur(4px); // 毛玻璃模糊效果
+    -webkit-backdrop-filter: blur(10px); // 兼容Safari浏览器
+  }
+  .el-dialog__body {
+    height: 600px;
+    overflow-y: auto;
+  }
+  .el-table,
+  .el-table__row,
+  .el-table tr,
+  .el-table th.el-table__cell {
+    background-color: transparent;
+    font-weight: 700;
+    color: #70757a;
+  }
+  .el-dialog__title {
+    font-weight: 900;
+    color: #70757a;
   }
 }
 </style>
