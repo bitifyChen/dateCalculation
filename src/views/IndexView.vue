@@ -1,15 +1,25 @@
 <script setup>
 import dayjs from 'dayjs'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import Month from '../components/monthCom.vue'
 import twHoliday from '../assets/twHoliday.json'
 import cnHoliday from '../assets/cnHoliday.json'
 //輸入年
 const year = computed(() =>
-  startDate.value ? dayjs(startDate.value).year() : new Date().getFullYear()
+  setYear.value
+    ? setYear.value
+    : startDate.value
+    ? dayjs(startDate.value).year()
+    : new Date().getFullYear()
 )
+const setYear = ref(null)
 //開始日
 const startDate = ref(null)
+watch(startDate, () => {
+  if (startDate.value) {
+    setYear.value = dayjs(startDate.value).year()
+  } //有手動輸入跳回該年
+})
 const workDays = ref(0)
 //Holiday
 const isSatHoliday = ref(false)
@@ -67,7 +77,12 @@ const yearHolidayArray = computed(() => {
 <template>
   <div class="container">
     <div class="left">
-      <div class="year">{{ year }}</div>
+      <div class="title">
+        <span class="back" @click="() => (setYear = year - 1)"></span>
+        <div class="year">{{ year }}</div>
+        <span class="next" @click="() => (setYear = year + 1)"></span>
+      </div>
+
       <main>
         <Month
           v-for="month in 12"
@@ -137,11 +152,36 @@ const yearHolidayArray = computed(() => {
   position: relative;
   .left {
     width: 700px;
-    .year {
-      font-size: 24px;
-      font-weight: 900;
-      text-align: center;
-      color: #fff;
+    .title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .back,
+      .next {
+        display: inline-block;
+        width: 12px;
+        height: 20px;
+        background-color: #fff;
+        margin: 0 10px;
+        opacity: 0.5;
+        transition: all 0.3s;
+        &:hover {
+          cursor: pointer;
+          opacity: 1;
+        }
+      }
+      .back {
+        clip-path: polygon(100% 0, 100% 100%, 0 50%);
+      }
+      .next {
+        clip-path: polygon(0 0, 0% 100%, 100% 50%);
+      }
+      .year {
+        font-size: 24px;
+        font-weight: 900;
+        text-align: center;
+        color: #fff;
+      }
     }
     main {
       display: grid;
