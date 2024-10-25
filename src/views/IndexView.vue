@@ -87,9 +87,7 @@ const yearHolidayArray = computed(() => {
         <label>避開節慶</label>
         <div class="checkbox">
           <span>台灣 <input v-model="isTwHoliday" type="checkbox" /></span>
-          <span
-            >中國(未完成) <input v-model="isCnHoliday" type="checkbox" disabled
-          /></span>
+          <span>中國<input v-model="isCnHoliday" type="checkbox" /></span>
         </div>
       </div>
       <div class="note">
