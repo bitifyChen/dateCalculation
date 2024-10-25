@@ -16,6 +16,9 @@ const isSatHoliday = ref(false)
 const isSunHoliday = ref(true)
 const isTwHoliday = ref(true)
 const isCnHoliday = ref(false)
+//自己輸入的假日
+const isCustomHoliday = ref(false)
+const customHoliday = ref('["2024-12-31","2025-01-01"]')
 
 const yearHolidayArray = computed(() => {
   const arr = []
@@ -42,6 +45,17 @@ const yearHolidayArray = computed(() => {
     if (isCnHoliday.value) {
       const _year = cnHoliday[year.value] ?? null
       if (_year && Object.keys(_year).includes(_date.format('YYYY-MM-DD'))) {
+        arr.push(_date.format('YYYY-MM-DD'))
+      }
+    }
+    //如過要避開自訂假日
+    if (isCustomHoliday.value) {
+      const _year = JSON.parse(customHoliday.value)
+      if (
+        _year &&
+        Array.isArray(_year) &&
+        _year.includes(_date.format('YYYY-MM-DD'))
+      ) {
         arr.push(_date.format('YYYY-MM-DD'))
       }
     }
@@ -89,6 +103,17 @@ const yearHolidayArray = computed(() => {
           <span>台灣 <input v-model="isTwHoliday" type="checkbox" /></span>
           <span>中國<input v-model="isCnHoliday" type="checkbox" /></span>
         </div>
+      </div>
+      <div class="cell">
+        <label>避開指定日期</label>
+        <div class="checkbox">
+          <span>開啟 <input v-model="isCustomHoliday" type="checkbox" /></span>
+        </div>
+        <textarea
+          rows="10"
+          v-if="isCustomHoliday"
+          v-model="customHoliday"
+        ></textarea>
       </div>
       <div class="note">
         <div class="title">備註</div>
@@ -150,6 +175,7 @@ const yearHolidayArray = computed(() => {
       margin-bottom: 5px; // 与输入框分隔开一点
       font-size: 0.9rem;
     }
+    textarea,
     input[type='date'],
     input[type='number'],
     input[type='checkbox'] {
